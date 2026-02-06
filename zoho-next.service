@@ -1,0 +1,22 @@
+# Systemd unit for Zoho Next.js app (sales-order-edit frontend).
+# Install: sudo cp /srv/mekco/zoho/zoho-next.service /etc/systemd/system/
+#         sudo systemctl daemon-reload
+#         sudo systemctl enable zoho-next
+#         sudo systemctl start zoho-next
+[Unit]
+Description=Zoho Next.js App (sales-order-edit)
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/srv/mekco/zoho
+Environment=NODE_ENV=production
+Environment=PORT=3001
+ExecStart=/usr/bin/node /srv/mekco/zoho/node_modules/next/dist/bin/next start -p 3001
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
