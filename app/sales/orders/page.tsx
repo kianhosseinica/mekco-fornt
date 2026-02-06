@@ -2878,234 +2878,243 @@ export default function SalesOrdersPage() {
                 </div>
               )}
 
-              {/* Status */}
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-4">
-                <p className="text-xs">Invoice Status : <span className="text-primary font-medium">{selectedOrder.invoiceStatus || "INVOICED"}</span></p>
-                <p className="text-xs">Shipment : <span className="text-orange-500 font-medium">{selectedOrder.shipmentStatus || "PENDING"}</span></p>
+              {/* Status & PDF Toggle - Zoho style */}
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-1 mb-4">
+                <p className="text-[13px] text-[#333]">Invoice Status : <span className="text-[#1a73a7] font-medium">{selectedOrder.invoiceStatus || "INVOICED"}</span></p>
+                <p className="text-[13px] text-[#333]">Shipment : <span className="text-[#e8a735] font-medium">{selectedOrder.shipmentStatus || "PENDING"}</span></p>
                 <div className="flex-1" />
-                <div className="flex items-center gap-1.5">
-                  <span className="text-xs">Show PDF View</span>
-                  <Switch checked={showPdfView} onCheckedChange={setShowPdfView} className="scale-90" />
+                <div className="flex items-center gap-2">
+                  <span className="text-[13px] text-[#333]">Show PDF View</span>
+                  <Switch checked={showPdfView} onCheckedChange={setShowPdfView} className="scale-90 data-[state=checked]:bg-[#3b8753]" />
                 </div>
               </div>
 
               {/* PDF Preview */}
               {showPdfView && (
                 <div className="w-full">
-                  {/* Customize Button - outside the PDF document */}
-                  <div className="flex justify-start mb-3">
-                    <Button variant="outline" size="sm" className="h-8 text-xs bg-transparent">
-                      <Settings className="w-3.5 h-3.5 mr-1.5" /> Customize
-                      <ChevronDown className="w-3.5 h-3.5 ml-1" />
-                    </Button>
-                  </div>
 
-                  {/* PDF Document */}
-                  <div ref={pdfPreviewRef} className="border rounded-lg bg-white relative overflow-hidden shadow-sm" style={{ isolation: 'isolate' }}>
-                    {/* Status Ribbon - always show current sales order status */}
+                  {/* PDF Document - white paper on light gray */}
+                  <div ref={pdfPreviewRef} className="border border-[#ccc] bg-white relative overflow-hidden shadow-sm" style={{ isolation: 'isolate' }}>
+                    {/* Status Ribbon - diagonal Zoho-style */}
                     {selectedOrder.status && (
-                      <div className="absolute left-0 top-0 w-32 h-32 overflow-hidden">
-                        <div className="absolute top-6 -left-8 w-40 bg-emerald-600 text-white text-xs py-1.5 text-center font-medium -rotate-45 shadow-md">
+                      <div className="absolute left-0 top-0 w-[120px] h-[120px] overflow-hidden pointer-events-none" style={{ zIndex: 2 }}>
+                        <div
+                          className="absolute text-white text-[11px] py-1 text-center font-medium shadow-md"
+                          style={{
+                            width: '170px',
+                            top: '26px',
+                            left: '-40px',
+                            transform: 'rotate(-45deg)',
+                            backgroundColor: '#4a9b8e',
+                          }}
+                        >
                           {selectedOrder.status}
                         </div>
                       </div>
                     )}
 
-                    <div className="p-6 md:p-8 lg:p-10">
-                      {/* Header with Logo and Quote Title */}
-                      <div className="flex flex-col sm:flex-row justify-between items-start gap-6 mb-10">
-                        {/* Company Logo & Info */}
-                        <div>
-                          <div className="w-28 h-16 rounded flex items-center justify-center overflow-hidden bg-white shrink-0 mb-3">
-                            <img alt="Mekco Supply Inc." width={112} height={64} className="object-contain w-full h-full p-1" src="/zoho/Mekco-Supply-logo-300px.png" />
-                          </div>
-                          <p className="text-sm font-semibold text-foreground">Mekco Supply Inc.</p>
-                          <p className="text-xs text-muted-foreground">16-110 West Beaver Creek Rd.</p>
-                          <p className="text-xs text-muted-foreground">Richmond Hill, Ontario L4B 1J9</p>
+                    <div className="p-8 md:p-10">
+                      {/* Header: Logo left, Quote title right */}
+                      <div className="flex justify-between items-start mb-6">
+                        {/* Company Logo */}
+                        <div className="w-[100px] h-[68px] rounded flex items-center justify-center overflow-hidden bg-[#4a9b8e]/10 shrink-0">
+                          <img alt="Mekco Supply Inc." width={100} height={68} className="object-contain w-full h-full p-1" src="/zoho/Mekco-Supply-logo-300px.png" />
                         </div>
 
                         {/* Quote Title */}
-                        <div className="text-left sm:text-right">
-                          <h2 className="text-3xl md:text-4xl font-light text-foreground mb-2">Quote</h2>
-                          <p className="text-sm text-muted-foreground">Quote# {selectedOrder.salesOrderNumber}</p>
+                        <div className="text-right">
+                          <h2 className="text-[32px] font-light text-[#333] leading-tight">Quote</h2>
+                          <p className="text-[13px] text-[#777] mt-1">Quote# {selectedOrder.salesOrderNumber}</p>
                         </div>
                       </div>
 
-                      {/* Order Info Grid */}
-                      <div className="flex flex-col sm:flex-row justify-between gap-6 mb-8">
-                        <div>
-                          <p className="text-xs text-muted-foreground mb-1">Bill To</p>
-                          <Link href={selectedOrder.customerId ? `/sales/customers?id=${selectedOrder.customerId}` : "#"} className="text-sm text-primary font-medium hover:underline">{selectedOrder.customerName}</Link>
-                        </div>
-                        <div className="space-y-1.5 sm:text-right">
-                          <div className="flex sm:justify-end gap-4">
-                            <span className="text-xs text-muted-foreground">Order Date :</span>
-                            <span className="text-xs">{formatDisplayDate(selectedOrder.date)}</span>
-                          </div>
-                          <div className="flex sm:justify-end gap-4">
-                            <span className="text-xs text-muted-foreground">Expected Shipment Date :</span>
-                            <span className="text-xs">{formatDisplayDate(selectedOrder.expectedShipmentDate) || formatDisplayDate(selectedOrder.date)}</span>
-                          </div>
-                          <div className="flex sm:justify-end gap-4">
-                            <span className="text-xs text-muted-foreground">Ref# :</span>
-                            <span className="text-xs">{selectedOrder.reference || "—"}</span>
-                          </div>
-                        </div>
+                      {/* Company Info below logo */}
+                      <div className="mb-8">
+                        <p className="text-[13px] font-semibold text-[#333]">Mekco Supply Inc.</p>
+                        <p className="text-[12px] text-[#555] leading-relaxed">16-110 West Beaver Creek Rd.</p>
+                        <p className="text-[12px] text-[#555] leading-relaxed">Richmond Hill, Ontario L4B 1J9</p>
                       </div>
 
-                      {/* Items Table - with inline editing */}
-                      <div className="border rounded overflow-hidden mb-6">
-                        {/* Edit Items Header */}
-                        <div className="flex items-center justify-between px-3 py-2 bg-muted/30 border-b">
-                          <span className="text-xs font-medium">Line Items</span>
-                          {!editingLineItems ? (
+                      {/* Order Details row: dates on right */}
+                      <div className="flex justify-end mb-4">
+                        <table className="text-[12px]">
+                          <tbody>
+                            <tr>
+                              <td className="pr-4 py-1 text-right text-[#555]">Order Date :</td>
+                              <td className="py-1 text-right text-[#333]">{formatDisplayDate(selectedOrder.date)}</td>
+                            </tr>
+                            <tr>
+                              <td className="pr-4 py-1 text-right text-[#555]">Expected Shipment<br />Date :</td>
+                              <td className="py-1 text-right text-[#333] align-bottom">{formatDisplayDate(selectedOrder.expectedShipmentDate) || formatDisplayDate(selectedOrder.date)}</td>
+                            </tr>
+                            <tr>
+                              <td className="pr-4 py-1 text-right text-[#555]">Ref# :</td>
+                              <td className="py-1 text-right text-[#333]">{selectedOrder.reference || "—"}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+
+                      {/* Bill To */}
+                      <div className="mb-6">
+                        <p className="text-[12px] text-[#555] mb-0.5">Bill To</p>
+                        <Link href={selectedOrder.customerId ? `/sales/customers?id=${selectedOrder.customerId}` : "#"} className="text-[13px] text-[#1a73a7] font-medium hover:underline">{selectedOrder.customerName}</Link>
+                      </div>
+
+                      {/* Items Table - Zoho style with dark header */}
+                      <div className="mb-4">
+                        {/* Edit Items bar - only when not editing */}
+                        {!editingLineItems ? (
+                          <div className="flex items-center justify-end mb-2">
                             <Button
                               variant="outline"
                               size="sm"
-                              className="h-6 text-[10px] px-2"
+                              className="h-6 text-[10px] px-2 bg-white border-[#ccc] text-[#555] hover:bg-[#f5f5f5]"
                               onClick={startEditingLineItems}
                             >
                               <Pencil className="w-3 h-3 mr-1" /> Edit Items
                             </Button>
-                          ) : (
-                            <div className="flex items-center gap-2">
-                              <Button
-                                variant="outline"
-                                size="sm"
-                                className="h-6 text-[10px] px-2"
-                                onClick={addEditLineItem}
-                              >
-                                <Plus className="w-3 h-3 mr-1" /> Add Item
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                className="h-6 text-[10px] px-2"
-                                onClick={cancelEditingLineItems}
-                                disabled={editItemsSaving}
-                              >
-                                Cancel
-                              </Button>
-                              <Button
-                                variant="default"
-                                size="sm"
-                                className="h-6 text-[10px] px-2 bg-teal-600 hover:bg-teal-700"
-                                onClick={saveEditedLineItems}
-                                disabled={editItemsSaving}
-                              >
-                                {editItemsSaving ? "Saving..." : "Save Changes"}
-                              </Button>
-                            </div>
-                          )}
-                        </div>
-                        <div className="overflow-x-auto">
-                          <Table>
-                            <TableHeader>
-                              <TableRow className="bg-teal-600">
-                                <TableHead className="text-xs text-white py-2.5 px-3 w-12 font-medium">#</TableHead>
-                                <TableHead className="text-xs text-white py-2.5 px-3 font-medium min-w-[200px]">Item & Description</TableHead>
-                                <TableHead className="text-xs text-white py-2.5 px-3 text-center w-20 font-medium">Qty</TableHead>
-                                <TableHead className="text-xs text-white py-2.5 px-3 text-right w-24 font-medium">Rate</TableHead>
-                                <TableHead className="text-xs text-white py-2.5 px-3 text-right w-24 font-medium">Amount</TableHead>
-                                {editingLineItems && (
-                                  <TableHead className="text-xs text-white py-2.5 px-3 w-12 font-medium"></TableHead>
-                                )}
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {editingLineItems ? (
-                                // Editing mode - show editable inputs
-                                editLineItems.map((item, i) => (
-                                  <TableRow key={item.id} className="border-b">
-                                    <TableCell className="py-2 px-3 text-xs align-middle">{i + 1}</TableCell>
-                                    <TableCell className="py-2 px-3">
-                                      <Input
-                                        className="h-7 text-xs"
-                                        value={item.itemDetails}
-                                        onChange={(e) => updateEditLineItem(item.id, "itemDetails", e.target.value)}
-                                        placeholder="Item description..."
-                                      />
-                                    </TableCell>
-                                    <TableCell className="py-2 px-3">
-                                      <Input
-                                        className="h-7 text-xs text-center w-16"
-                                        type="number"
-                                        min="0"
-                                        value={item.quantity}
-                                        onChange={(e) => updateEditLineItem(item.id, "quantity", e.target.value)}
-                                      />
-                                    </TableCell>
-                                    <TableCell className="py-2 px-3">
-                                      <Input
-                                        className="h-7 text-xs text-right w-20"
-                                        type="number"
-                                        min="0"
-                                        step="0.01"
-                                        value={item.rate}
-                                        onChange={(e) => updateEditLineItem(item.id, "rate", e.target.value)}
-                                      />
-                                    </TableCell>
-                                    <TableCell className="py-2 px-3 text-xs text-right font-medium">
-                                      ${parseFloat(item.amount || "0").toFixed(2)}
-                                    </TableCell>
-                                    <TableCell className="py-2 px-3">
-                                      <Button
-                                        variant="ghost"
-                                        size="icon"
-                                        className="h-6 w-6 text-red-500 hover:text-red-600 hover:bg-red-50"
-                                        onClick={() => removeEditLineItem(item.id)}
-                                        disabled={editLineItems.length <= 1}
-                                      >
-                                        <X className="w-3.5 h-3.5" />
-                                      </Button>
-                                    </TableCell>
-                                  </TableRow>
-                                ))
-                              ) : (
-                                // View mode - show static content
-                                (selectedOrder.lineItems?.length ? selectedOrder.lineItems : [{ itemDetails: "—", quantity: "—", rate: "—", amount: "—" }]).map((li, i) => (
-                                  <TableRow key={i} className="border-b">
-                                    <TableCell className="py-2.5 px-3 text-xs align-top">{i + 1}</TableCell>
-                                    <TableCell className="py-2.5 px-3 text-xs">{li.itemDetails || "—"}</TableCell>
-                                    <TableCell className="py-2.5 px-3 text-xs text-center">{li.quantity}</TableCell>
-                                    <TableCell className="py-2.5 px-3 text-xs text-right">{li.rate}</TableCell>
-                                    <TableCell className="py-2.5 px-3 text-xs text-right">{li.amount}</TableCell>
-                                  </TableRow>
-                                ))
+                          </div>
+                        ) : (
+                          <div className="flex items-center justify-end gap-2 mb-2">
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-6 text-[10px] px-2 bg-white border-[#ccc]"
+                              onClick={addEditLineItem}
+                            >
+                              <Plus className="w-3 h-3 mr-1" /> Add Item
+                            </Button>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-6 text-[10px] px-2 text-[#555]"
+                              onClick={cancelEditingLineItems}
+                              disabled={editItemsSaving}
+                            >
+                              Cancel
+                            </Button>
+                            <Button
+                              size="sm"
+                              className="h-6 text-[10px] px-2 bg-[#3b8753] hover:bg-[#2d6b41] text-white"
+                              onClick={saveEditedLineItems}
+                              disabled={editItemsSaving}
+                            >
+                              {editItemsSaving ? "Saving..." : "Save Changes"}
+                            </Button>
+                          </div>
+                        )}
+
+                        <table className="w-full text-[12px] border-collapse">
+                          <thead>
+                            <tr className="bg-[#5b5b5b] text-white">
+                              <th className="text-left px-3 py-2 font-medium border border-[#4a4a4a] w-10">#</th>
+                              <th className="text-left px-3 py-2 font-medium border border-[#4a4a4a]">Item & Description</th>
+                              <th className="text-center px-3 py-2 font-medium border border-[#4a4a4a] w-16">Qty</th>
+                              <th className="text-right px-3 py-2 font-medium border border-[#4a4a4a] w-20">Rate</th>
+                              <th className="text-right px-3 py-2 font-medium border border-[#4a4a4a] w-20">Amount</th>
+                              {editingLineItems && (
+                                <th className="px-2 py-2 border border-[#4a4a4a] w-8"></th>
                               )}
-                            </TableBody>
-                          </Table>
-                        </div>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {editingLineItems ? (
+                              editLineItems.map((item, i) => (
+                                <tr key={item.id} className="border-b border-[#e5e7eb]">
+                                  <td className="px-3 py-2 border border-[#e5e7eb] text-[#333] align-middle">{i + 1}</td>
+                                  <td className="px-3 py-2 border border-[#e5e7eb]">
+                                    <Input
+                                      className="h-7 text-xs"
+                                      value={item.itemDetails}
+                                      onChange={(e) => updateEditLineItem(item.id, "itemDetails", e.target.value)}
+                                      placeholder="Item description..."
+                                    />
+                                  </td>
+                                  <td className="px-3 py-2 border border-[#e5e7eb]">
+                                    <Input
+                                      className="h-7 text-xs text-center w-14"
+                                      type="number"
+                                      min="0"
+                                      value={item.quantity}
+                                      onChange={(e) => updateEditLineItem(item.id, "quantity", e.target.value)}
+                                    />
+                                  </td>
+                                  <td className="px-3 py-2 border border-[#e5e7eb]">
+                                    <Input
+                                      className="h-7 text-xs text-right w-20"
+                                      type="number"
+                                      min="0"
+                                      step="0.01"
+                                      value={item.rate}
+                                      onChange={(e) => updateEditLineItem(item.id, "rate", e.target.value)}
+                                    />
+                                  </td>
+                                  <td className="px-3 py-2 border border-[#e5e7eb] text-right text-[#333] font-medium">
+                                    {parseFloat(item.amount || "0").toFixed(2)}
+                                  </td>
+                                  <td className="px-2 py-2 border border-[#e5e7eb]">
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="h-6 w-6 text-red-500 hover:text-red-600 hover:bg-red-50"
+                                      onClick={() => removeEditLineItem(item.id)}
+                                      disabled={editLineItems.length <= 1}
+                                    >
+                                      <X className="w-3.5 h-3.5" />
+                                    </Button>
+                                  </td>
+                                </tr>
+                              ))
+                            ) : (
+                              (selectedOrder.lineItems?.length ? selectedOrder.lineItems : [{ itemDetails: "—", quantity: "—", rate: "—", amount: "—" }]).map((li, i) => (
+                                <tr key={i}>
+                                  <td className="px-3 py-2.5 border border-[#e5e7eb] text-[#333] align-top">{i + 1}</td>
+                                  <td className="px-3 py-2.5 border border-[#e5e7eb] text-[#333]">{li.itemDetails || "—"}</td>
+                                  <td className="px-3 py-2.5 border border-[#e5e7eb] text-center text-[#333]">{li.quantity}</td>
+                                  <td className="px-3 py-2.5 border border-[#e5e7eb] text-right text-[#333]">{li.rate}</td>
+                                  <td className="px-3 py-2.5 border border-[#e5e7eb] text-right text-[#333]">{li.amount}</td>
+                                </tr>
+                              ))
+                            )}
+                          </tbody>
+                        </table>
+
                         {/* Editing mode totals preview */}
                         {editingLineItems && (
-                          <div className="px-3 py-2 bg-muted/20 border-t text-xs text-right">
-                            <span className="text-muted-foreground">New Total: </span>
-                            <span className="font-medium">
+                          <div className="py-2 text-[12px] text-right text-[#555] mt-1">
+                            New Total: <span className="font-medium text-[#333]">
                               ${(editLineItems.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0) * 1.13).toFixed(2)}
                             </span>
-                            <span className="text-muted-foreground ml-1">(incl. 13% HST)</span>
+                            <span className="ml-1">(incl. 13% HST)</span>
                           </div>
                         )}
                       </div>
 
-                      {/* Totals */}
+                      {/* Totals - right aligned, Zoho style */}
                       <div className="flex justify-end">
-                        <div className="w-full sm:w-52 space-y-1.5">
-                          <div className="flex justify-between text-xs py-1">
-                            <span className="text-muted-foreground">Sub Total</span>
-                            <span>{(selectedOrder.subTotal ?? selectedOrder.amount).toFixed(2)}</span>
+                        <div className="w-56">
+                          <div className="flex justify-between text-[12px] py-1.5 border-b border-[#eee]">
+                            <span className="text-[#555]">Sub Total</span>
+                            <span className="text-[#333]">{(selectedOrder.subTotal ?? selectedOrder.amount).toFixed(2)}</span>
                           </div>
-                          <div className="flex justify-between text-xs py-1">
-                            <span className="text-muted-foreground">GST/HST (13%)</span>
-                            <span>{((selectedOrder.taxAmount ?? 0) || (selectedOrder.amount * 0.13)).toFixed(2)}</span>
+                          <div className="flex justify-between text-[12px] py-1.5 border-b border-[#eee]">
+                            <span className="text-[#555]">GST/HST (13%)</span>
+                            <span className="text-[#333]">{((selectedOrder.taxAmount ?? 0) || (selectedOrder.amount * 0.13)).toFixed(2)}</span>
                           </div>
-                          <div className="flex justify-between text-sm font-semibold py-2 border-t bg-muted/30 px-3 -mx-3 mt-2">
-                            <span>Total</span>
-                            <span>${selectedOrder.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
+                          <div className="flex justify-between text-[13px] font-semibold py-2.5 bg-[#f3f4f6] px-3 -mx-3 mt-1">
+                            <span className="text-[#333]">Total</span>
+                            <span className="text-[#333]">${selectedOrder.amount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
+
+                  {/* PDF Template link - below the PDF like Zoho */}
+                  <div className="mt-3 text-center">
+                    <span className="text-[12px] text-[#555]">{"PDF Template : 'Standard Template' "}</span>
+                    <button className="text-[12px] text-[#1a73a7] hover:underline">Change</button>
                   </div>
                 </div>
               )}
