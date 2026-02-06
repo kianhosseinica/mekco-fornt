@@ -381,35 +381,10 @@ export default function CustomersPage() {
           <style>
             * { box-sizing: border-box; }
             body { font-family: system-ui, -apple-system, sans-serif; padding: 24px; font-size: 14px; color: #111; }
-            table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+            table { width: 100%; border-collapse: collapse; }
             th, td { border: 1px solid #e5e7eb; padding: 8px 12px; text-align: left; font-size: 12px; }
-            th { background: #f3f4f6; font-weight: 500; }
-            .text-right { text-align: right !important; }
-            .account-summary { border: 1px solid #e5e7eb; border-radius: 6px; overflow: hidden; margin-bottom: 24px; }
-            .account-summary-header { background: #f3f4f6; padding: 8px 12px; margin-bottom: 8px; }
-            .mb-8 { margin-bottom: 32px; }
-            .mb-6 { margin-bottom: 24px; }
-            .mb-4 { margin-bottom: 16px; }
-            .text-xl { font-size: 20px; }
-            .font-bold { font-weight: 700; }
-            .font-semibold { font-weight: 600; }
-            .text-sm { font-size: 13px; }
-            .text-xs { font-size: 12px; }
-            .text-muted-foreground { color: #6b7280; }
-            .text-primary { color: #111; }
-            .bg-\\[\\#4a7c59\\] { background-color: #4a7c59 !important; }
-            .rounded { border-radius: 6px; }
-            .flex { display: flex; }
-            .justify-between { justify-content: space-between; }
-            .justify-end { justify-content: flex-end; }
-            .items-start { align-items: flex-start; }
-            .space-y-1 > * + * { margin-top: 4px; }
-            .space-y-2 > * + * { margin-top: 8px; }
-            .px-3 { padding-left: 12px; padding-right: 12px; }
-            .py-2 { padding-top: 8px; padding-bottom: 8px; }
-            .py-1 { padding-top: 4px; padding-bottom: 4px; }
-            .mb-2 { margin-bottom: 8px; }
-            [class*="4a7c59"] { background-color: #4a7c59 !important; }
+            th { font-weight: 500; }
+            img { max-width: 112px; height: auto; }
           </style>
         </head>
         <body>${content}</body>
@@ -520,7 +495,12 @@ export default function CustomersPage() {
         end = new Date(now.getFullYear(), now.getMonth() + 1, 0)
         break
     }
-    const fmt = (d: Date) => d.toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric" })
+    const fmt = (d: Date) => {
+      const m = d.toLocaleDateString("en-US", { month: "short" })
+      const day = String(d.getDate()).padStart(2, "0")
+      const yr = d.getFullYear()
+      return `${m} ${day}, ${yr}`
+    }
     const label = period === "this_month" ? "This Month" : period === "last_month" ? "Last Month" : period === "last_3_months" ? "Last 3 Months" : period === "this_year" ? "This Year" : "Last Year"
     return { start, end, label, subtitle: `${fmt(start)} to ${fmt(end)}`, startISO: start.toISOString().slice(0, 10), endISO: end.toISOString().slice(0, 10) }
   }
@@ -2365,14 +2345,14 @@ export default function CustomersPage() {
               )}
 
               {activeDetailTab === 'statement' && (
-                <div className="p-6">
-                  {/* Statement Controls */}
-                  <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+                <div className="p-4 sm:p-6 bg-[#f0f0f0] min-h-full">
+                  {/* Statement Controls - matches Zoho exactly */}
+                  <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
                     <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="sm" className="h-8 text-xs gap-1 bg-transparent">
-                            <span className="w-4 h-4 flex items-center justify-center">&#128197;</span>
+                          <Button variant="outline" size="sm" className="h-8 text-xs gap-1 bg-white border-[#d5d5d5] text-foreground hover:bg-[#f5f5f5]">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="shrink-0"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                             {getStatementRange().label}
                             <ChevronDown className="w-3 h-3 shrink-0" />
                           </Button>
@@ -2387,7 +2367,7 @@ export default function CustomersPage() {
                       </DropdownMenu>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                          <Button variant="outline" size="sm" className="h-8 text-xs gap-1 bg-transparent">
+                          <Button variant="outline" size="sm" className="h-8 text-xs gap-1 bg-white border-[#d5d5d5] text-foreground hover:bg-[#f5f5f5]">
                             Filter By: {statementFilter === "all" ? "All" : statementFilter === "invoices" ? "Invoices" : statementFilter === "payments" ? "Payments" : "Credit Notes"}
                             <ChevronDown className="w-3 h-3 shrink-0" />
                           </Button>
@@ -2400,64 +2380,67 @@ export default function CustomersPage() {
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Button variant="ghost" size="icon" className="h-8 w-8" title="Print" onClick={handlePrintStatement}>
-                        <Printer className="w-4 h-4" />
+                    <div className="flex items-center gap-1">
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-[#555] hover:text-foreground" title="Print" onClick={handlePrintStatement}>
+                        <Printer className="w-[18px] h-[18px]" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8" title="Download PDF" onClick={handleDownloadStatement}>
-                        <Download className="w-4 h-4" />
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-[#555] hover:text-foreground" title="Download PDF" onClick={handleDownloadStatement}>
+                        <Download className="w-[18px] h-[18px]" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="h-8 w-8" title="PDF" onClick={handleDownloadStatement}>
-                        <FileText className="w-4 h-4" />
+                      <Button variant="ghost" size="icon" className="h-8 w-8 text-[#555] hover:text-foreground" title="PDF" onClick={handleDownloadStatement}>
+                        <FileText className="w-[18px] h-[18px]" />
                       </Button>
-                      <Button variant="outline" size="sm" className="h-8 text-xs gap-1 bg-transparent" onClick={() => setShowSendEmailDialog(true)}>
-                        <Mail className="w-4 h-4" />
+                      <Button size="sm" className="h-8 text-xs gap-1.5 ml-2 bg-[#3b8753] hover:bg-[#2d6b41] text-white" onClick={() => setShowSendEmailDialog(true)}>
+                        <Mail className="w-3.5 h-3.5" />
                         Send Email
                       </Button>
                     </div>
                   </div>
 
-                  {/* Statement Title */}
-                  <div className="text-center mb-6">
-                    <h2 className="text-lg font-medium">Customer Statement for {selectedCustomer?.name}</h2>
-                    <p className="text-sm text-muted-foreground">{filteredStatementTransactions.range.subtitle}</p>
+                  {/* Statement Title - centered above preview */}
+                  <div className="text-center mb-5">
+                    <h2 className="text-base font-medium text-foreground">Customer Statement for {selectedCustomer?.name}</h2>
+                    <p className="text-sm text-muted-foreground mt-0.5">From {filteredStatementTransactions.range.subtitle.replace(" to ", " To ")}</p>
                   </div>
 
-                  {/* Customize Button - responsive placement above PDF */}
-                  <div className="flex justify-end mb-3 max-w-3xl mx-auto">
-                    <Button variant="default" size="sm" className="h-8 text-xs bg-primary gap-1">
-                      Customize
-                      <ChevronDown className="w-3 h-3" />
-                    </Button>
+                  {/* Customize Button - Zoho teal, positioned top-right of PDF area */}
+                  <div className="relative max-w-3xl mx-auto">
+                    <div className="absolute -top-1 right-0 z-10">
+                      <Button size="sm" className="h-8 text-xs gap-1 bg-[#3b8753] hover:bg-[#2d6b41] text-white rounded-md shadow-sm">
+                        <Settings className="w-3.5 h-3.5" />
+                        Customize
+                        <ChevronDown className="w-3 h-3" />
+                      </Button>
+                    </div>
                   </div>
 
-                  {/* Statement PDF Preview */}
-                  <div ref={statementRef} className="border rounded-lg p-6 bg-white max-w-3xl mx-auto">
+                  {/* Statement PDF Preview - white paper on gray bg */}
+                  <div ref={statementRef} className="border border-[#ccc] rounded p-8 bg-white max-w-3xl mx-auto mt-6 shadow-sm">
                     {/* Company Header */}
+                    <div className="flex items-start justify-between mb-10">
+                      <div className="w-28 h-[72px] rounded flex items-center justify-center overflow-hidden bg-[#4a9b8e]/10 shrink-0">
+                        <Image src="/zoho/Mekco-Supply-logo-300px.png" alt="Mekco Supply Inc." width={112} height={72} className="object-contain w-full h-full p-1" priority />
+                      </div>
+                      <div className="text-right text-[13px] leading-relaxed">
+                        <p className="font-semibold text-foreground">Mekco Supply Inc.</p>
+                        <p className="text-[#555]">16-110 West Beaver Creek Rd.</p>
+                        <p className="text-[#555]">Richmond Hill, Ontario L4B 1J9</p>
+                      </div>
+                    </div>
+
+                    {/* To Section & Statement of Accounts - side by side */}
                     <div className="flex items-start justify-between mb-8">
-                      <div className="w-24 h-16 rounded flex items-center justify-center overflow-hidden bg-white shrink-0">
-                        <Image src="/zoho/Mekco-Supply-logo-300px.png" alt="Mekco Supply Inc." width={96} height={64} className="object-contain w-full h-full p-1" priority />
+                      <div>
+                        <p className="text-xs text-[#888] mb-0.5">To</p>
+                        <p className="text-sm font-medium text-[#1a73a7] hover:underline cursor-pointer">{selectedCustomer?.name}</p>
                       </div>
-                      <div className="text-right text-sm">
-                        <p className="font-semibold">Mekco Supply Inc.</p>
-                        <p className="text-muted-foreground">16-110 West Beaver Creek Rd.</p>
-                        <p className="text-muted-foreground">Richmond Hill, Ontario L4B 1J9</p>
+                      <div className="text-right">
+                        <h3 className="text-lg font-bold text-foreground border-b-2 border-foreground pb-1 inline-block">Statement of Accounts</h3>
+                        <p className="text-xs text-[#555] mt-1">{filteredStatementTransactions.range.subtitle.replace(" to ", " To ")}</p>
                       </div>
                     </div>
 
-                    {/* To Section */}
-                    <div className="mb-8">
-                      <p className="text-xs text-muted-foreground">To</p>
-                      <p className="text-sm text-primary">{selectedCustomer?.name}</p>
-                    </div>
-
-                    {/* Statement Title */}
-                    <div className="text-right mb-6">
-                      <h3 className="text-xl font-bold">Statement of Accounts</h3>
-                      <p className="text-sm text-muted-foreground">{filteredStatementTransactions.range.subtitle}</p>
-                    </div>
-
-                    {/* Account Summary */}
+                    {/* Account Summary - as a proper table like Zoho */}
                     {(() => {
                       const { rows } = filteredStatementTransactions
                       const invoicedAmount = rows.filter((r) => r.type === "invoice").reduce((sum, r) => sum + r.amount, 0)
@@ -2465,84 +2448,88 @@ export default function CustomersPage() {
                       const creditsApplied = rows.filter((r) => r.type === "credit_note").reduce((sum, r) => sum + Math.abs(r.amount), 0)
                       const balanceDue = invoicedAmount - amountPaid - creditsApplied
                       return (
-                        <div className="account-summary mb-6 border border-[#e5e7eb] rounded-md overflow-hidden">
-                          <div className="account-summary-header bg-[#f3f4f6] px-3 py-2 mb-2">
-                            <h4 className="text-sm font-medium">Account Summary</h4>
-                          </div>
-                          <div className="space-y-1 text-sm">
-                            <div className="flex justify-between px-3 py-1">
-                              <span>Opening Balance</span>
-                              <span>$ 0.00</span>
-                            </div>
-                            <div className="flex justify-between px-3 py-1">
-                              <span>Invoiced Amount</span>
-                              <span>$ {invoicedAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
-                            </div>
-                            <div className="flex justify-between px-3 py-1">
-                              <span>Amount Paid</span>
-                              <span>$ {amountPaid.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
-                            </div>
-                            <div className="flex justify-between px-3 py-1 font-medium">
-                              <span>Balance Due</span>
-                              <span>$ {balanceDue.toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
-                            </div>
-                          </div>
+                        <div className="mb-6 ml-auto" style={{ maxWidth: "320px" }}>
+                          <table className="w-full text-[12px] border-collapse">
+                            <thead>
+                              <tr>
+                                <th colSpan={2} className="bg-[#f3f4f6] text-left px-3 py-2 font-medium text-foreground border border-[#ddd]">Account Summary</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr>
+                                <td className="px-3 py-1.5 border-l border-[#ddd] text-[#333]">Opening Balance</td>
+                                <td className="px-3 py-1.5 text-right border-r border-[#ddd] text-[#333]">$ 0.00</td>
+                              </tr>
+                              <tr>
+                                <td className="px-3 py-1.5 border-l border-[#ddd] text-[#333]">Invoiced Amount</td>
+                                <td className="px-3 py-1.5 text-right border-r border-[#ddd] text-[#333]">$ {invoicedAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                              </tr>
+                              <tr>
+                                <td className="px-3 py-1.5 border-l border-[#ddd] text-[#333]">Amount Paid</td>
+                                <td className="px-3 py-1.5 text-right border-r border-[#ddd] text-[#333]">$ {amountPaid.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                              </tr>
+                              <tr className="border-t border-[#ddd]">
+                                <td className="px-3 py-1.5 border-l border-b border-[#ddd] font-medium text-foreground">Balance Due</td>
+                                <td className="px-3 py-1.5 text-right border-r border-b border-[#ddd] font-medium text-foreground">$ {balanceDue.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
                       )
                     })()}
 
-                    {/* Transactions Table */}
-                    <Table>
-                      <TableHeader>
-                        <TableRow className="bg-muted/30">
-                          <TableHead className="text-xs py-2">Date</TableHead>
-                          <TableHead className="text-xs py-2">Transactions</TableHead>
-                          <TableHead className="text-xs py-2">Details</TableHead>
-                          <TableHead className="text-xs py-2 text-right">Amount</TableHead>
-                          <TableHead className="text-xs py-2 text-right">Payments</TableHead>
-                          <TableHead className="text-xs py-2 text-right">Balance</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <TableRow>
-                          <TableCell className="text-xs py-2">{filteredStatementTransactions.range.subtitle.split(" to ")[0] || ""}</TableCell>
-                          <TableCell className="text-xs py-2"></TableCell>
-                          <TableCell className="text-xs py-2">***Opening Balance***</TableCell>
-                          <TableCell className="text-xs py-2 text-right">0.00</TableCell>
-                          <TableCell className="text-xs py-2 text-right"></TableCell>
-                          <TableCell className="text-xs py-2 text-right">0.00</TableCell>
-                        </TableRow>
+                    {/* Transactions Table - Zoho-style with colored header */}
+                    <table className="w-full text-[12px] border-collapse">
+                      <thead>
+                        <tr className="bg-[#5b5b5b] text-white">
+                          <th className="text-left px-3 py-2 font-medium border border-[#4a4a4a]">Date</th>
+                          <th className="text-left px-3 py-2 font-medium border border-[#4a4a4a]">Transactions</th>
+                          <th className="text-left px-3 py-2 font-medium border border-[#4a4a4a]">Details</th>
+                          <th className="text-right px-3 py-2 font-medium border border-[#4a4a4a]">Amount</th>
+                          <th className="text-right px-3 py-2 font-medium border border-[#4a4a4a]">Payments</th>
+                          <th className="text-right px-3 py-2 font-medium border border-[#4a4a4a]">Balance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td className="px-3 py-2 border border-[#e5e7eb] text-[#333]">{filteredStatementTransactions.range.subtitle.split(" to ")[0] || ""}</td>
+                          <td className="px-3 py-2 border border-[#e5e7eb]"></td>
+                          <td className="px-3 py-2 border border-[#e5e7eb] text-[#333]">***Opening Balance***</td>
+                          <td className="px-3 py-2 border border-[#e5e7eb] text-right text-[#333]">0.00</td>
+                          <td className="px-3 py-2 border border-[#e5e7eb] text-right"></td>
+                          <td className="px-3 py-2 border border-[#e5e7eb] text-right text-[#333]">0.00</td>
+                        </tr>
                         {invoicesLoading ? (
-                          <TableRow>
-                            <TableCell colSpan={6} className="text-xs py-4 text-center text-muted-foreground">
+                          <tr>
+                            <td colSpan={6} className="px-3 py-4 text-center text-muted-foreground border border-[#e5e7eb]">
                               Loading transactions...
-                            </TableCell>
-                          </TableRow>
+                            </td>
+                          </tr>
                         ) : filteredStatementTransactions.rows.length === 0 ? (
-                          <TableRow>
-                            <TableCell colSpan={6} className="text-xs py-4 text-center text-muted-foreground">
+                          <tr>
+                            <td colSpan={6} className="px-3 py-4 text-center text-muted-foreground border border-[#e5e7eb]">
                               No transactions found for this period and filter
-                            </TableCell>
-                          </TableRow>
+                            </td>
+                          </tr>
                         ) : (
                           filteredStatementTransactions.rows.map((r, idx) => (
-                            <TableRow key={`${r.type}-${r.details}-${idx}`}>
-                              <TableCell className="text-xs py-2">{r.date}</TableCell>
-                              <TableCell className="text-xs py-2">{r.transaction}</TableCell>
-                              <TableCell className="text-xs py-2 text-primary font-medium">{r.details}</TableCell>
-                              <TableCell className="text-xs py-2 text-right">{r.amount !== 0 ? r.amount.toLocaleString("en-US", { minimumFractionDigits: 2 }) : ""}</TableCell>
-                              <TableCell className="text-xs py-2 text-right">{r.payment !== 0 ? r.payment.toLocaleString("en-US", { minimumFractionDigits: 2 }) : ""}</TableCell>
-                              <TableCell className="text-xs py-2 text-right">{r.balance.toLocaleString("en-US", { minimumFractionDigits: 2 })}</TableCell>
-                            </TableRow>
+                            <tr key={`${r.type}-${r.details}-${idx}`}>
+                              <td className="px-3 py-2 border border-[#e5e7eb] text-[#333]">{r.date}</td>
+                              <td className="px-3 py-2 border border-[#e5e7eb] text-[#333]">{r.transaction}</td>
+                              <td className="px-3 py-2 border border-[#e5e7eb] text-[#1a73a7] font-medium">{r.details}</td>
+                              <td className="px-3 py-2 border border-[#e5e7eb] text-right text-[#333]">{r.amount !== 0 ? r.amount.toLocaleString("en-US", { minimumFractionDigits: 2 }) : ""}</td>
+                              <td className="px-3 py-2 border border-[#e5e7eb] text-right text-[#333]">{r.payment !== 0 ? r.payment.toLocaleString("en-US", { minimumFractionDigits: 2 }) : ""}</td>
+                              <td className="px-3 py-2 border border-[#e5e7eb] text-right text-[#333]">{r.balance.toLocaleString("en-US", { minimumFractionDigits: 2 })}</td>
+                            </tr>
                           ))
                         )}
-                      </TableBody>
-                    </Table>
+                      </tbody>
+                    </table>
 
                     {/* Balance Due Footer */}
-                    <div className="flex justify-end mt-4">
-                      <div className="text-sm font-medium">
-                        Balance Due <span className="ml-8">$ {(filteredStatementTransactions.rows.length > 0 ? filteredStatementTransactions.rows[filteredStatementTransactions.rows.length - 1].balance : 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
+                    <div className="flex justify-end mt-4 border-t border-[#e5e7eb] pt-3">
+                      <div className="text-[13px] font-semibold text-foreground">
+                        Balance Due <span className="ml-10">$ {(filteredStatementTransactions.rows.length > 0 ? filteredStatementTransactions.rows[filteredStatementTransactions.rows.length - 1].balance : 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
                       </div>
                     </div>
                   </div>
