@@ -500,7 +500,7 @@ export default function VendorsPage() {
     amountPaid: number,
     balanceDue: number,
   ) => {
-    const logoUrl = typeof window !== "undefined" ? `${window.location.origin}/zoho/Mekco-Supply-logo-300px.png` : ""
+    const logoUrl = typeof window !== "undefined" ? `${window.location.origin}/Mekco-Supply-logo-300px.png` : ""
     const vendorName = vendor.name || "Vendor"
     const billingAddr = vendor.addresses?.find((a) => a.type === "billing")
     const addressLine = billingAddr?.street1
@@ -1734,7 +1734,7 @@ export default function VendorsPage() {
                         {/* Company header: logo left, sender address right */}
                         <div className="flex items-start justify-between mb-6">
                           <div className="w-24 h-16 rounded flex items-center justify-center overflow-hidden bg-white shrink-0">
-                            <Image src="/zoho/Mekco-Supply-logo-300px.png" alt="Mekco Supply Inc." width={96} height={64} className="object-contain w-full h-full p-1" priority />
+                            <Image src="/Mekco-Supply-logo-300px.png" alt="Mekco Supply Inc." width={96} height={64} className="object-contain w-full h-full p-1" priority />
                           </div>
                           <div className="text-right text-sm">
                             <p className="font-semibold">Mekco Supply Inc.</p>

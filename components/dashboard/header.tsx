@@ -97,7 +97,7 @@ export function Header() {
         </Button>
 
         <Avatar className="w-6 h-6">
-          <AvatarImage src="/zoho/placeholder.svg" />
+          <AvatarImage src="/placeholder.svg" />
           <AvatarFallback className="bg-orange-100 text-orange-600 text-xs">SB</AvatarFallback>
         </Avatar>
 

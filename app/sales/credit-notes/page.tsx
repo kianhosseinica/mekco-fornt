@@ -57,7 +57,7 @@ function getCreditNotePrintDocument(cn: CreditNote): string {
   <div style="max-width:800px;margin:0 auto;padding:32px;border:1px solid #e5e7eb;border-radius:8px;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px;">
       <div>
-        <img src="/zoho/Mekco-Supply-logo-300px.png" alt="Mekco" style="width:140px;height:80px;object-fit:contain;margin-bottom:12px;" />
+        <img src="/Mekco-Supply-logo-300px.png" alt="Mekco" style="width:140px;height:80px;object-fit:contain;margin-bottom:12px;" />
         <p style="font-weight:600;margin:0;font-size:16px;">Mekco Supply Inc.</p>
         <p style="font-size:13px;color:#6b7280;margin:4px 0;">16-110 West Beaver Creek Rd.</p>
         <p style="font-size:13px;color:#6b7280;margin:0;">Richmond Hill, Ontario L4B 1J9</p>
@@ -777,7 +777,7 @@ export default function CreditNotesPage() {
                   <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-8">
                     <div>
                       <div className="w-28 h-16 rounded flex items-center justify-center overflow-hidden bg-white shrink-0 mb-3">
-                        <img alt="Mekco Supply Inc." width={112} height={64} className="object-contain w-full h-full p-1" src="/zoho/Mekco-Supply-logo-300px.png" />
+                        <img alt="Mekco Supply Inc." width={112} height={64} className="object-contain w-full h-full p-1" src="/Mekco-Supply-logo-300px.png" />
                       </div>
                       <p className="text-sm font-semibold">Mekco Supply Inc.</p>
                       <p className="text-xs text-muted-foreground">16-110 West Beaver Creek Rd.</p>

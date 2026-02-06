@@ -269,7 +269,7 @@ export default function CustomersPage() {
 
     let logoData = ""
     try {
-      const logoUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/zoho/Mekco-Supply-logo-300px.png`
+      const logoUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/Mekco-Supply-logo-300px.png`
       const res = await fetch(logoUrl)
       const blob = await res.blob()
       logoData = await new Promise<string>((resolve, reject) => {
@@ -2436,7 +2436,7 @@ export default function CustomersPage() {
                     {/* Company Header */}
                     <div className="flex items-start justify-between mb-8">
                       <div className="w-24 h-16 rounded flex items-center justify-center overflow-hidden bg-white shrink-0">
-                        <Image src="/zoho/Mekco-Supply-logo-300px.png" alt="Mekco Supply Inc." width={96} height={64} className="object-contain w-full h-full p-1" priority />
+                        <Image src="/Mekco-Supply-logo-300px.png" alt="Mekco Supply Inc." width={96} height={64} className="object-contain w-full h-full p-1" priority />
                       </div>
                       <div className="text-right text-sm">
                         <p className="font-semibold">Mekco Supply Inc.</p>

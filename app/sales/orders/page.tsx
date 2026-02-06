@@ -475,7 +475,7 @@ export default function SalesOrdersPage() {
 
   // Build quote HTML for print/PDF — exact same layout and styles as on-screen PDF preview
   const getQuotePrintDocument = (order: SalesOrder) => {
-    const logoUrl = typeof window !== "undefined" ? `${window.location.origin}/zoho/Mekco-Supply-logo-300px.png` : ""
+    const logoUrl = typeof window !== "undefined" ? `${window.location.origin}/Mekco-Supply-logo-300px.png` : ""
     const lineItems = order.lineItems?.length ? order.lineItems : [{ itemDetails: "—", quantity: "—", rate: "—", amount: "—" }]
     const subTotal = (order.subTotal ?? order.amount).toFixed(2)
     const taxAmount = ((order.taxAmount ?? 0) || order.amount * 0.13).toFixed(2)
@@ -2917,7 +2917,7 @@ export default function SalesOrdersPage() {
                         {/* Company Logo & Info */}
                         <div>
                           <div className="w-28 h-16 rounded flex items-center justify-center overflow-hidden bg-white shrink-0 mb-3">
-                            <img alt="Mekco Supply Inc." width={112} height={64} className="object-contain w-full h-full p-1" src="/zoho/Mekco-Supply-logo-300px.png" />
+                            <img alt="Mekco Supply Inc." width={112} height={64} className="object-contain w-full h-full p-1" src="/Mekco-Supply-logo-300px.png" />
                           </div>
                           <p className="text-sm font-semibold text-foreground">Mekco Supply Inc.</p>
                           <p className="text-xs text-muted-foreground">16-110 West Beaver Creek Rd.</p>

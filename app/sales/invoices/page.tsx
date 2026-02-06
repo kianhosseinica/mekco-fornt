@@ -281,7 +281,7 @@ export default function InvoicesPage() {
   // Build printable HTML for an invoice (used for PDF/Print)
   const getInvoicePrintDocument = (invoice: Invoice) => {
     const logoUrl =
-      typeof window !== "undefined" ? `${window.location.origin}/zoho/Mekco-Supply-logo-300px.png` : "/zoho/Mekco-Supply-logo-300px.png"
+      typeof window !== "undefined" ? `${window.location.origin}/Mekco-Supply-logo-300px.png` : "/Mekco-Supply-logo-300px.png"
     const items = invoice.lineItems && invoice.lineItems.length > 0 ? invoice.lineItems : []
     const rowsHtml =
       items.length > 0
@@ -1550,7 +1550,7 @@ export default function InvoicesPage() {
                           width={112}
                           height={64}
                           className="object-contain w-full h-full p-1"
-                          src="/zoho/Mekco-Supply-logo-300px.png"
+                          src="/Mekco-Supply-logo-300px.png"
                         />
                       </div>
                       <p className="text-sm font-semibold">Mekco Supply Inc.</p>

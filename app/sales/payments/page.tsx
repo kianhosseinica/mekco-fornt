@@ -86,7 +86,7 @@ function getPaymentReceiptDocument(payment: Payment): string {
   <div style="width:100%;border:1px solid #e5e7eb;border-radius:8px;padding:32px;">
     <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px;">
       <div>
-        <img src="/zoho/Mekco-Supply-logo-300px.png" alt="Mekco" style="width:140px;height:80px;object-fit:contain;margin-bottom:12px;" />
+        <img src="/Mekco-Supply-logo-300px.png" alt="Mekco" style="width:140px;height:80px;object-fit:contain;margin-bottom:12px;" />
         <p style="font-weight:600;margin:0;font-size:16px;">Mekco Supply Inc.</p>
         <p style="font-size:13px;color:#6b7280;margin:4px 0;">16-110 West Beaver Creek Rd.</p>
         <p style="font-size:13px;color:#6b7280;margin:0;">Richmond Hill, Ontario L4B 1J9</p>
@@ -1048,7 +1048,7 @@ export default function PaymentsReceivedPage() {
                   {/* Header with Logo */}
                   <div className="flex gap-6 mb-6">
                     <div className="w-28 h-16 rounded flex items-center justify-center overflow-hidden bg-white shrink-0">
-                      <img alt="Mekco Supply Inc." width={112} height={64} className="object-contain w-full h-full p-1" src="/zoho/Mekco-Supply-logo-300px.png" />
+                      <img alt="Mekco Supply Inc." width={112} height={64} className="object-contain w-full h-full p-1" src="/Mekco-Supply-logo-300px.png" />
                     </div>
                     <div>
                       <p className="text-sm font-semibold">Mekco Supply Inc.</p>
